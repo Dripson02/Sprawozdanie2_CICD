@@ -1,0 +1,5 @@
+# Opracować pliki Dockerfile dla każdego mikroserwisu jaki został zaplanowany
+w ramach architektury z punktu 1. Ocena zawartości poszczególnych plików
+Dockerfile opierać się będzie na zgodności z dobrymi praktykami stosowanymi
+w procesie budowania obrazów. Proszę przypomnieć sobie zalecenia zebrane
+w dokumentacji środowiska Docker: https://docs.docker.com/build/building/bestpractices/
