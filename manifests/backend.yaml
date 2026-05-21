@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasklite-backend
+  namespace: tasklite
+spec:
+  replicas: 2 # Dwie repliki dla wysokiej dostępności
+  selector:
+    matchLabels:
+      app: tasklite-backend
+  template:
+    metadata:
+      labels:
+        app: tasklite-backend
+    spec:
+      containers:
+      - name: backend
+        image: TWOJ_LOGIN/tasklite-backend:latest
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: tasklite-config
+        - secretRef:
+            name: tasklite-secrets
+        resources: # Wyższa ocena: Ograniczenia zasobów
+          limits:
+            cpu: "300m"
+            memory: "256Mi"
+          requests:
+            cpu: "150m"
+            memory: "128Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tasklite-backend-service
+  namespace: tasklite
+spec:
+  type: ClusterIP # Dostępny tylko wewnątrz klastra
+  ports:
+  - port: 8000
+    targetPort: 8000
+  selector:
+    app: tasklite-backend

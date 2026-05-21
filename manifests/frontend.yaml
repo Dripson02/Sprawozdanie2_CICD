@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasklite-frontend
+  namespace: tasklite
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tasklite-frontend
+  template:
+    metadata:
+      labels:
+        app: tasklite-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: TWOJ_LOGIN/tasklite-frontend:latest
+        ports:
+        - containerPort: 80
+        resources: # Wyższa ocena: Ograniczenia zasobów
+          limits:
+            cpu: "200m"
+            memory: "128Mi"
+          requests:
+            cpu: "100m"
+            memory: "64Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tasklite-frontend-service
+  namespace: tasklite
+spec:
+  type: NodePort # Mapuje port kontenera na port maszyny Minikube
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 32080
+  selector:
+    app: tasklite-frontend
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tasklite-ingress
+  namespace: tasklite
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: tasklite.local # Adres, pod którym aplikacja będzie dostępna w przeglądarce
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: tasklite-frontend-service
+            port:
+              number: 80

@@ -1,0 +1,8 @@
+mapapiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tasklite-config
+  namespace: tasklite
+data:
+  POSTGRES_DB: "tasklite_db"
+  DATABASE_URL: "postgresql://tasklite_user:SecurePassword123@tasklite-db-0.tasklite-db-service.tasklite.svc.cluster.local:5432/tasklite_db"

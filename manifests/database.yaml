@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim # Nazwa PVC dla bazy danych
+  namespace: tasklite
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tasklite-db
+  namespace: tasklite
+spec:
+  serviceName: "tasklite-db-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tasklite-db
+  template:
+    metadata:
+      labels:
+        app: tasklite-db
+    spec:
+      containers:
+      - name: postgres
+        image: TWOJ_LOGIN/tasklite-db:latest  # Obraz z Zadania 1 i 3
+        ports:
+        - containerPort: 5432
+          name: dbport
+        envFrom:
+        - configMapRef:
+            name: tasklite-config
+        - secretRef:
+            name: tasklite-secrets
+        resources: # Wyższa ocena: Ograniczenia zasobów
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+        volumeMounts:
+        - name: db-persistent-storage
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: db-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tasklite-db-service
+  namespace: tasklite
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  clusterIP: None # Headless service idealny dla StatefulSet
+  selector:
+    app: tasklite-db
