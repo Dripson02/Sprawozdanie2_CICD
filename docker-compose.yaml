@@ -26,7 +26,8 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - backend-net
       - frontend-net
@@ -37,7 +38,7 @@ services:
           memory: 512M
 
   frontend:
-    image: iscra56/tasklite-ui:1.0
+    image: iscra56/tasklite-ui:1.1
     container_name: tasklite-ui
     ports:
       - "8080:80"
