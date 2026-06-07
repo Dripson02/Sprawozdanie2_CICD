@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tasklite-app
+  namespace: argocd
+spec:
+  # Odwołanie do projektu (który stworzymy w następnym kroku)
+  project: tasklite-project
+
+  # Konfiguracja źródła (repozytorium GitHub)
+  source:
+    repoURL: 'https://github.com/TWOJ_LOGIN/tasklite-devops-project.git' # Zmień na swój link!
+    targetRevision: HEAD
+    path: manifests # Ścieżka do katalogu z manifestami z Zadania 2
+
+  # Konfiguracja miejsca docelowego (Twój lokalny Minikube)
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: tasklite
+
+  # Polityki synchronizacji wymagane w zadaniu
+  syncPolicy:
+    automated:
+      # Automatyczne usuwanie zasobów, które zniknęły z repozytorium Git
+      prune: true
+      # Nadpisywanie zmian wprowadzonych imperatywnie (z palca) do stanu z GitHuba
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true # Automatycznie tworzy namespace, jeśli nie istnieje
