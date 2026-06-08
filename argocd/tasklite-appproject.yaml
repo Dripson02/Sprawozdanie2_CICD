@@ -6,14 +6,9 @@ metadata:
 spec:
   description: "Zabezpieczony projekt ArgoCD dla aplikacji TaskLite"
 
-  # Zdefiniowanie z jakich repozytoriów Git ten projekt może pobierać manifesty.
-  # Gwiazdka oznacza wszystkie, ale w środowisku produkcyjnym podaje się tu dokładny URL repozytorium.
   sourceRepos:
     - '*' 
 
-  # KRYTYCZNY PUNKT ZADANIA: Ograniczenie docelowego miejsca wdrożenia
   destinations:
-    # Określenie, że aplikacja może być wdrożona tylko na lokalnym klastrze
     - server: 'https://kubernetes.default.svc'
-      # Ograniczenie wdrażania manifestów TYLKO do tej konkretnej przestrzeni nazw
       namespace: tasklite
