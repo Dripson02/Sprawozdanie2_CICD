@@ -7,7 +7,7 @@ spec:
   project: tasklite-project
 
   source:
-    repoURL: 'https://github.com/Dripson02/Sprawozdanie2_CICD.git
+    repoURL: 'https://github.com/Dripson02/Sprawozdanie2_CICD.git'
     targetRevision: HEAD
     path: manifests 
 
