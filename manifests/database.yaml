@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: postgres
-        image: TWOJ_LOGIN/tasklite-db:latest  
+        image: iscra56/tasklite-db:1.0  
         ports:
         - containerPort: 5432
           name: dbport

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: TWOJ_LOGIN/tasklite-frontend:latest
+        image: iscra56/tasklite-ui:1.1
         ports:
         - containerPort: 80
         resources: # Wyższa ocena: Ograniczenia zasobów

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: TWOJ_LOGIN/tasklite-backend:latest
+        image: iscra56/tasklite-api:1.1
         ports:
         - containerPort: 8000
         envFrom:
